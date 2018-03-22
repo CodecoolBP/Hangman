@@ -1,13 +1,16 @@
 import random
 import os
 
+
 def read_from_file(filename):
     file = open(filename)
     cont = file.readlines()
     for line in cont:
         print(line.strip("\n"))
 
+
 def guessing_the_word(word):
+    good_guess = 0
     max_guess = 5
     empty_line = []
     list_of_wrong_letters = []
@@ -15,46 +18,42 @@ def guessing_the_word(word):
         empty_line.append("_")
     print("".join(empty_line))
 
-    while "_" in empty_line:
+    while True:
         guess = input("Give me a letter\n")
         guess = guess.upper()
         if len(guess) > 1 or guess in "12345667890":
             clear_screen()
-            handling_with_error("Give me a letter and not a number")
-        if guess in word:
+            print("Give me a letter and not a number")
+        elif guess in word:
             clear_screen()
-            
             empty_line[word.index(guess)] = guess
-            
+            good_guess += 1
         else:
             clear_screen()
             list_of_wrong_letters.append(guess)
             max_guess -= 1
-            
 
-        if max_guess == 0:
-            clear_screen()
-            read_from_file("/home/daniel/Desktop/working area/Hangman/hangman_drawing.txt")
-            print("GAME OVER")
-
+        point_check(good_guess, max_guess, word)
         print("".join(empty_line))
-        print("These are the wrong letters\n",",".join(list_of_wrong_letters))
+        print("\nThese are your wrong letters\n", ",".join(list_of_wrong_letters))
+
+
+def point_check(good_guess, max_guess, word):
+    game_file = {"win": "/home/daniel/Desktop/working area/Hangman/man.txt",
+                 "lose": "/home/daniel/Desktop/working area/Hangman/hangman_drawing.txt"}
     clear_screen()
-    read_from_file("/home/daniel/Desktop/working area/Hangman/man.txt")
-    print("YOU WON")
+    if max_guess == 0:
+        read_from_file(game_file["lose"])
+        print("YOU LOSE\n")       
+    elif good_guess == len(word):
+        read_from_file(game_file["win"])
+        print("YOU WON\n")
 
 
 def the_words(group):
-    cities = ["FOSHAN","BRASÍLIA","MILANO","BUKAREST"]
-    animals = ["DOLPHIN","DRAGONFLY","PIGEON"]
-    foods = ["DONUTS","WALNUTS","YOGURT"]
-    if group == "1":
-        return guessing_the_word(cities[random.randint(0, len(cities)-1)])
-    elif group == "2":
-        return guessing_the_word(animals[random.randint(0, len(animals)-1)])
-    elif group == "3":
-        return guessing_the_word(foods[random.randint(0, len(foods)-1)])
-    # További csoportokat kell megadni.
+    all_group = {"1": ["FOSHAN", "BRASÍLIA", "MILANO", "BUKAREST"], "2": [
+        "DOLPHIN", "DRAGONFLY", "PIGEON"], "3": ["DONUTS", "WALNUTS", "YOGURT"]}
+    return random.choice(all_group[group])
 
 
 def hangman_topic():
@@ -65,24 +64,16 @@ def hangman_topic():
     to_the_main_menu = input("Press a button to start the game: \n")
     if to_the_main_menu:
         clear_screen()
-        main_menu()
 
 
 def main_menu():
-
-    menu = "Please select a topic:\nPress [1] if you want to guess a city name. \
-    \nPress [2] if you want to guess a animal.\nPress [3] if you want to guess a ...\n"
-    chosen_group = input(menu)
-    if chosen_group in "123":
-        return the_words(chosen_group)
-    else:
+    chosen_group = "0"
+    while chosen_group not in "123":
+        menu = "Please select a topic:\nPress [1] if you want to guess a city name. \
+        \nPress [2] if you want to guess a animal.\nPress [3] if you want to guess a food\n"
+        chosen_group = input(menu)
         clear_screen()
-        handling_with_error("Please choose from the menu")
-        main_menu()
-
-
-def handling_with_error(text):
-    print(text+'\n')
+    return chosen_group
 
 
 def clear_screen():
@@ -91,12 +82,10 @@ def clear_screen():
 
 def main():
     hangman_topic()
+    chosen_group = main_menu()
+    the_world_to_guess = the_words(main_menu())
+    guessing_the_word(the_world_to_guess)
 
 
 if __name__ == '__main__':
     main()
-
-
-
-
-
