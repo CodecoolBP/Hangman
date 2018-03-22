@@ -1,16 +1,21 @@
 import random
 import os
 
+def read_from_file(filename):
+    file = open(filename)
+    cont = file.readlines()
+    for line in cont:
+        print(line.strip("\n"))
 
 def guessing_the_word(word):
-    number_of_item = len(word)
+    max_guess = 5
     empty_line = []
     list_of_wrong_letters = []
     for i in range(len(word)):
         empty_line.append("_")
     print("".join(empty_line))
-    
-    while number_of_item >= 0:
+
+    while "_" in empty_line:
         guess = input("Give me a letter\n")
         guess = guess.upper()
         if len(guess) > 1 or guess in "12345667890":
@@ -18,24 +23,37 @@ def guessing_the_word(word):
             handling_with_error("Give me a letter and not a number")
         if guess in word:
             clear_screen()
+            
             empty_line[word.index(guess)] = guess
-            number_of_item -= 1 
+            
         else:
             clear_screen()
             list_of_wrong_letters.append(guess)
+            max_guess -= 1
+            
+
+        if max_guess == 0:
+            clear_screen()
+            read_from_file("/home/daniel/Desktop/working area/Hangman/hangman_drawing.txt")
+            print("GAME OVER")
 
         print("".join(empty_line))
         print("These are the wrong letters\n",",".join(list_of_wrong_letters))
-
+    clear_screen()
+    read_from_file("/home/daniel/Desktop/working area/Hangman/man.txt")
+    print("YOU WON")
 
 
 def the_words(group):
-    cities = ["BUDAPEST", "KIEV", "LONDON"]
-    animals = ["HELLBENDER", "BLOMBFISH"]
+    cities = ["FOSHAN","BRASÍLIA","MILANO","BUKAREST"]
+    animals = ["DOLPHIN","DRAGONFLY","PIGEON"]
+    foods = ["DONUTS","WALNUTS","YOGURT"]
     if group == "1":
         return guessing_the_word(cities[random.randint(0, len(cities)-1)])
     elif group == "2":
         return guessing_the_word(animals[random.randint(0, len(animals)-1)])
+    elif group == "3":
+        return guessing_the_word(foods[random.randint(0, len(foods)-1)])
     # További csoportokat kell megadni.
 
 
@@ -63,7 +81,7 @@ def main_menu():
         main_menu()
 
 
-def handling_with_error(text):  # Ennek nincs értelme hogy ha csap kiprintelsz
+def handling_with_error(text):
     print(text+'\n')
 
 
@@ -77,9 +95,8 @@ def main():
 
 if __name__ == '__main__':
     main()
-def read_from_file(filename):
-    file = open(filename)
-    cont = file.readlines()
-    for line in cont:
-        print(line.strip("\n"))
+
+
+
+
 
