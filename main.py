@@ -68,3 +68,9 @@ def main():
 
 if __name__ == '__main__':
     main()
+def read_from_file(filename):
+    file = open(filename)
+    cont = file.readlines()
+    for line in cont:
+        print(line.strip("\n"))
+
