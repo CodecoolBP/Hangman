@@ -3,21 +3,30 @@ import os
 
 
 def guessing_the_word(word):
-    print(word)
+    number_of_item = len(word)
     empty_line = []
+    list_of_wrong_letters = []
     for i in range(len(word)):
         empty_line.append("_")
     print("".join(empty_line))
-    while True:
+    
+    while number_of_item >= 0:
         guess = input("Give me a letter\n")
         guess = guess.upper()
         if len(guess) > 1 or guess in "12345667890":
             clear_screen()
             handling_with_error("Give me a letter and not a number")
         if guess in word:
+            clear_screen()
             empty_line[word.index(guess)] = guess
-            
+            number_of_item -= 1 
+        else:
+            clear_screen()
+            list_of_wrong_letters.append(guess)
+
         print("".join(empty_line))
+        print("These are the wrong letters\n",",".join(list_of_wrong_letters))
+
 
 
 def the_words(group):
